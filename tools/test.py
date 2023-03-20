@@ -8,6 +8,18 @@ from slowfast.utils.parser import load_config, parse_args
 from test_net import test
 from train_net import train
 from visualization import visualize
+from slowfast.models import build_model
+import numpy as np
+import slowfast.utils.checkpoint as cu
+import slowfast.utils.distributed as du
+import slowfast.utils.logging as logging
+import slowfast.utils.misc as misc
+import slowfast.visualization.tensorboard_vis as tb
+import torch
+from fvcore.common.file_io import PathManager
+from slowfast.datasets import loader
+from slowfast.models import build_model
+from slowfast.utils.meters import TestMeter
 
 """Wrapper to train and test a video classification model."""
 
@@ -18,8 +30,7 @@ def main():
     """
     args = parse_args()
     cfg = load_config(args)
-    launch_job(cfg=cfg, init_method=args.init_method, func=test)
-
+    model = build_model(cfg)
 
 
 if __name__ == "__main__":
