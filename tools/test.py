@@ -22,15 +22,20 @@ from slowfast.models import build_model
 from slowfast.utils.meters import TestMeter
 
 """Wrapper to train and test a video classification model."""
-
+logger = logging.get_logger(__name__)
 
 def main():
     """
     Main function to spawn the train and test process.
     """
+
     args = parse_args()
     cfg = load_config(args)
+    
+    # Setup logging format.
+    logging.setup_logging(cfg.OUTPUT_DIR)
     model = build_model(cfg)
+    cu.load_test_checkpoint(cfg, model)
 
 
 if __name__ == "__main__":
