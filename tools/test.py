@@ -44,8 +44,12 @@ def main():
     logging.setup_logging(cfg.OUTPUT_DIR)
     model = build_model(cfg)
     cu.load_test_checkpoint(cfg, model)
+    print(model)
     # test model
-    input = torch.randn(1, 3, 8, 224, 224).cuda()
+    frames = torch.randn(1, 3, 8, 224, 224).cuda()
+    label = torch.tensor([1])
+    index = torch.tensor([1])
+    input = [frames, label, index, {}]
     output = model(input)
     print(output.shape)
 
