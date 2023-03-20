@@ -20,6 +20,14 @@ from fvcore.common.file_io import PathManager
 from slowfast.datasets import loader
 from slowfast.models import build_model
 from slowfast.utils.meters import TestMeter
+from fvcore.common.registry import Registry
+
+MODEL_REGISTRY = Registry("MODEL")
+MODEL_REGISTRY.__doc__ = """
+Registry for video model.
+The registered object will be called with `obj(cfg)`.
+The call should return a `torch.nn.Module` object.
+"""
 
 """Wrapper to train and test a video classification model."""
 logger = logging.get_logger(__name__)
@@ -36,6 +44,10 @@ def main():
     logging.setup_logging(cfg.OUTPUT_DIR)
     model = build_model(cfg)
     cu.load_test_checkpoint(cfg, model)
+    # test model
+    input = torch.randn(1, 3, 8, 224, 224).cuda()
+    output = model(input)
+    print(output.shape)
 
 
 if __name__ == "__main__":
